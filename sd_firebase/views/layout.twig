@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ title }}</title>
+
+	<link rel='stylesheet' href='/stylesheets/style.css' />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
+	<link rel="stylesheet" type="text/css" href="/vendor/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href=/"fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="/fonts/iconic/css/material-design-iconic-font.min.css">
+	<link rel="stylesheet" type="text/css" href="/vendor/select2/select2.min.css">
+	<link rel="stylesheet" type="text/css" href="/css/util.css">
+	<link rel="stylesheet" type="text/css" href="/css/main.css">
+  	<link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+
+ 	<link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet">
+  	<link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic' rel='stylesheet' type='text/css'> 
+
+
+ 	<link href="vendor/magnific-popup/magnific-popup.css" rel="stylesheet">
+ 
+ 
+	<link href="css/creative.min.css" rel="stylesheet"> 
+
+
+	 <!-- <link rel="stylesheet" href="file:///C:/Users/Denilson/Downloads/AdminLTE-2.3.11-master/bootstrap/css/bootstrap.min.css">-->
+
+
+    <link rel="stylesheet" href="/fonts/font-awesome-4.7.0/css/ionicons.min.css">
+  
+    <link rel="stylesheet" href="/css/AdminLTE.min.css">
+
+     <link rel="stylesheet" href="/cssqskin-blue.min.css">
+
+        <script src="/javascripts/jquery-2.2.3.min.js"></script>
+    
+    <script src="/javascripts/bootstrap.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="/javascripts/app.min.js"></script>
+
+
+
+
+  </head>
+  <body>
+
+
+    {% block body %}{% endblock %}
+
+
+    <!-- Configurações para a conexão com firebase -->    
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase.js"></script>
+
+	<script>
+	  // Initialize Firebase
+	  var config = {
+	    apiKey: "AIzaSyAddxP57wWPUTZISH_V1_x_sHoG0btqGxg",
+	    authDomain: "sgaa-a0c8f.firebaseapp.com",
+	    databaseURL: "https://sgaa-a0c8f.firebaseio.com",
+	    projectId: "sgaa-a0c8f",
+	    storageBucket: "sgaa-a0c8f.appspot.com",
+	    messagingSenderId: "448086261229"
+	  };
+	  firebase.initializeApp(config);
+	</script>
+
+
+	<script>
+
+		function   send_data(){
+
+		
+			var database = firebase.database();
+
+			let tarefa = document.getElementById('nameTarefa')
+			let autor = document.getElementById('autor')
+			let linguagem = document.getElementById('linguaguem') 
+			let github = document.getElementById('emailGit') 
+
+		  	firebase.database().ref("sgaa/"+tarefa.value).set({
+			    workname: tarefa.value,
+			    author: autor.value,
+			    language: linguaguem.value,
+			    github: github.value
+
+			});
+
+
+		}
+
+		
+		
+	</script>
+
+
+   	<script>
+
+			function checkIfLoggedIn(){
+
+				if(localStorage.getItem('firebase_idToken')){
+					// alert("LOGADO")
+					// document.getElementById('gone')
+					// .setAttribute('style','display:none; visibility: hidden')
+
+					// document.getElementById('google-pic')
+					// .src=localStorage.getItem('google_photo')
+					
+					// document.getElementById('google-displayName')
+					// .innerHTML=localStorage.getItem('google_username')
+
+	            	// document.getElementById('signout')
+	            	// .setAttribute('style', 'display: inline-block; visibility: visible')
+
+				}else{
+
+					document.getElementById('gone')
+					.setAttribute('style','display:inline-block; visibility: visible')
+
+	            	// document.getElementById('signout')
+	            	// .setAttribute('style', 'display: none; visibility: hidden')                
+				}
+			}
+
+
+			window.onload = function(){
+	    		checkIfLoggedIn()
+			}
+			
+
+			function signOut(){
+			    firebase.auth().signOut()
+			    
+			    document.getElementById('google-pic')
+			    .src=""
+
+			    document.getElementById('google-displayName')
+			    .innerHTML=" "
+	    		
+	    		redirect('/')
+	    // checkIfLoggedIn()
+			}
+
+			
+			function signInWithGoogle(){
+			
+
+			    var googleAuthProvider = new firebase.auth.GoogleAuthProvider
+			    
+			    firebase.auth().signInWithPopup(googleAuthProvider)
+			        .then( function(data) {
+			            console.log(data)
+
+			            let photoURL = data.additionalUserInfo.profile.picture
+			            let nameUser = data.user.displayName
+			            let emailUser = data.user.email
+			            var idToken = data.credential.idToken
+
+			            localStorage.setItem('firebase_idToken',idToken)
+			            localStorage.setItem('google_photo',photoURL)
+			            localStorage.setItem('google_username',nameUser)
+
+			            document.getElementById('google-pic')
+			                    .setAttribute('src', photoURL)
+
+			            document.getElementById('google-displayName')
+			                    .innerHTML=nameUser
+
+			            document.getElementById('google-email')
+			                    .innerHTML=emailUser	                    
+			                    
+			             checkIfLoggedIn()       
+			            // checkIfLoggedIn()
+			        })
+			        .catch( function(error) {
+			            console.log(error)
+			            // checkIfLoggedIn()
+			        })
+
+			       // redirect('/cadastro')
+			       
+			       
+			}
+	
+	</script>
+	  <script >
+           function listar(){
+               
+               var userlist = document.getElementById('userlist'); 
+               firebase.database().ref('/sgaa').on('value', function(snapshot){
+                   userlist.innerHTML=''
+                   snapshot.forEach(function(item){
+                       console.log(item.val())
+                       var p =document.createElement('p');
+                       p.classList.add("teste")
+                       p.appendChild(document.createTextNode(item.val().author + ',' + item.val().github +',' + item.val().language+',' + item.val().workname ))
+                        userlist.appendChild(p);
+
+
+                        });
+                    });
+
+                
+            }
+            
+        </script>
+    <script>
+        function remover(){
+        	
+        	 
+            var database = firebase.database();
+
+			let tarefa = document.getElementById('Tarefa')
+			let autor = document.getElementById('author')
+			let linguagem = document.getElementById('languague') 
+			let github = document.getElementById('Git') 
+
+		  	firebase.database().ref("sgaa/"+tarefa.value).remove()	
+			    
+
+		
+		}
+    </script>
+  </body>
+</html>

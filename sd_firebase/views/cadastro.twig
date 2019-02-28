@@ -1,0 +1,49 @@
+
+{% extends 'layout.twig' %}
+
+{% block body %}
+
+
+
+	<div class="container-contact100">
+		<div class="wrap-contact100">
+			<form class="contact100-form validate-form" method="POST">
+				<span class="contact100-form-title">
+					Registrar Tarefa
+				</span>
+
+				<div class="wrap-input100 validate-input bg1" data-validate="Digite o nome da tarefa">
+					<span class="label-input100">Nome da tarefa *</span>
+					<input class="input100" type="text" id="nameTarefa" placeholder="Digite o nome da tarefa">
+				</div>
+
+				<div class="wrap-input100 validate-input bg1" data-validate="Digite o nome Nome do autor da tarefa">
+					<span class="label-input100">Nome do autor da tarefa *</span>
+					<input class="input100" type="text" id="autor" placeholder="Digite o nome Nome do autor da tarefa">
+				</div>
+
+				<div class="wrap-input100 validate-input bg1" data-validate="Digite o nome da Linguagem de programaçã">
+					<span class="label-input100">Linguagem de programação*</span>
+					<input class="input100" type="text" id="linguaguem" placeholder="Digite o nome da Linguagem de programação">
+				</div>
+
+				<div class="wrap-input100 validate-input bg1 rs1-wrap-input100" data-validate = "Digite o link do gitHub(e@a.x)">
+					<span class="label-input100">Link do gitHub*</span>
+					<input class="input100" type="text" id="emailGit" placeholder="Digite o link do gitHub">
+				</div>
+
+				<div class="container-contact100-form-btn">
+					<button class="contact100-form-btn" type="button" id="addButton" onclick="send_data()">
+						<span>
+							Submit tarefa
+							<i class="fa fa-long-arrow-right m-l-7" aria-hidden="true"></i>
+						</span>
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+
+
+{% endblock %}
